@@ -1,0 +1,427 @@
+{
+  "name": "Health Samurai Pipeline",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "92a73240-9e5d-4ea8-aa50-cae4d0db3779",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        -176
+      ],
+      "webhookId": "b9dad9bf-c41e-4be1-a95d-e1686d782ad2",
+      "credentials": {
+        "telegramApi": {
+          "id": "WjpHWg3Eo6T3a5nr",
+          "name": "HealthSamuraiBot"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.kafka",
+      "typeVersion": 1,
+      "position": [
+        720,
+        -352
+      ],
+      "id": "9f8b9b3a-38c0-45e4-9c7a-60a561ac633a",
+      "name": "Kafka",
+      "credentials": {
+        "kafka": {
+          "id": "AWJfIfz94QqEIgiu",
+          "name": "Kafka account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.kafkaTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        48,
+        208
+      ],
+      "id": "7f73dbdc-5b7a-4c1b-a7d7-18358fc4766f",
+      "name": "Kafka Trigger",
+      "credentials": {
+        "kafka": {
+          "id": "AWJfIfz94QqEIgiu",
+          "name": "Kafka account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        624,
+        16
+      ],
+      "id": "38848499-b382-4603-9afb-db61b7cc36fd",
+      "name": "Send a text message3",
+      "webhookId": "7b285da5-a070-452d-a640-51987ddba1dd",
+      "credentials": {
+        "telegramApi": {
+          "id": "WjpHWg3Eo6T3a5nr",
+          "name": "HealthSamuraiBot"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        -176
+      ],
+      "id": "e7448614-fd3f-47cf-a659-e05528a77e21",
+      "name": "Valid HL7"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        464,
+        -176
+      ],
+      "id": "3ad80d95-9cb2-42d6-b3d2-0d4749d5afb6",
+      "name": "If",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        208
+      ],
+      "id": "fb729b48-50b4-4da9-8265-3e82926c5f52",
+      "name": "Parser"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        928,
+        -160
+      ],
+      "id": "bfdd88da-3f2c-4386-a974-64e9f1f920aa",
+      "name": "NO VALID",
+      "webhookId": "7b285da5-a070-452d-a640-51987ddba1dd",
+      "credentials": {
+        "telegramApi": {
+          "id": "WjpHWg3Eo6T3a5nr",
+          "name": "HealthSamuraiBot"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        928,
+        -352
+      ],
+      "id": "123ac1e5-bc22-43ce-a8d8-423111983b6f",
+      "name": "Message Published",
+      "webhookId": "7b285da5-a070-452d-a640-51987ddba1dd",
+      "credentials": {
+        "telegramApi": {
+          "id": "WjpHWg3Eo6T3a5nr",
+          "name": "HealthSamuraiBot"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        928,
+        32
+      ],
+      "id": "4833482d-f456-4e48-a827-8db5acb8b5f6",
+      "name": "FHIR Patient",
+      "webhookId": "7b285da5-a070-452d-a640-51987ddba1dd",
+      "credentials": {
+        "telegramApi": {
+          "id": "WjpHWg3Eo6T3a5nr",
+          "name": "HealthSamuraiBot"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        624,
+        208
+      ],
+      "id": "0a1677d2-881e-4955-ba11-71cd93fcccb6",
+      "name": "Convert fhir"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1472,
+        208
+      ],
+      "id": "e63ca82e-211f-420e-8e81-6b97e2f5f300",
+      "name": "If1"
+    },
+    {
+      "parameters": {},
+      "id": "5e382212-51cf-40c8-8205-61de208e7453",
+      "name": "AidBox Patient",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1264,
+        208
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1792,
+        304
+      ],
+      "id": "14f1c41e-6867-4872-b9e7-3b4fa53da19a",
+      "name": "Error",
+      "webhookId": "7b285da5-a070-452d-a640-51987ddba1dd",
+      "credentials": {
+        "telegramApi": {
+          "id": "WjpHWg3Eo6T3a5nr",
+          "name": "HealthSamuraiBot"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1792,
+        112
+      ],
+      "id": "ef255d17-29ca-443d-b33d-f612c6a992d3",
+      "name": "Success",
+      "webhookId": "7b285da5-a070-452d-a640-51987ddba1dd",
+      "credentials": {
+        "telegramApi": {
+          "id": "WjpHWg3Eo6T3a5nr",
+          "name": "HealthSamuraiBot"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -16,
+        -176
+      ],
+      "id": "02e7d40a-61bf-43eb-a931-787ab2a456a0",
+      "name": "If2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        288,
+        -432
+      ],
+      "id": "32a2eef2-a321-49a0-b739-951e227d173e",
+      "name": "Start",
+      "webhookId": "7b285da5-a070-452d-a640-51987ddba1dd",
+      "credentials": {
+        "telegramApi": {
+          "id": "WjpHWg3Eo6T3a5nr",
+          "name": "HealthSamuraiBot"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Kafka": {
+      "main": [
+        [
+          {
+            "node": "Message Published",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Kafka Trigger": {
+      "main": [
+        [
+          {
+            "node": "Parser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message3": {
+      "main": [
+        []
+      ]
+    },
+    "Valid HL7": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser": {
+      "main": [
+        [
+          {
+            "node": "Convert fhir",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a text message3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Kafka",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "NO VALID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert fhir": {
+      "main": [
+        [
+          {
+            "node": "FHIR Patient",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AidBox Patient",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FHIR Patient": {
+      "main": [
+        []
+      ]
+    },
+    "AidBox Patient": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Start",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Valid HL7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "4ef0ec62-bfe1-40b5-92f2-c18e97179e29",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "bce5733cacfc4e7aef9a0d02aa49a6d1d655c85ebd6e75229f475002be8f1796"
+  },
+  "id": "90nhNgH04ggbXXSW",
+  "tags": []
+}

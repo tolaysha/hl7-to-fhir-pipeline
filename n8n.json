@@ -1,0 +1,83 @@
+{
+    "nodes": [
+      {
+        "id": "telegramTrigger",
+        "name": "Telegram Trigger",
+        "type": "n8n-nodes-base.telegramTrigger",
+        "typeVersion": 1,
+        "position": [100, 300],
+        "credentials": {
+          "telegramApi": {
+            "id": "your-telegram-credentials-id",
+            "name": "Telegram Account"
+          }
+        },
+        "parameters": {
+          "updateInterval": 1000,
+          "chatIds": [],
+          "options": {}
+        }
+      },
+      {
+        "id": "transformHL7",
+        "name": "Transform HL7 → FHIR",
+        "type": "n8n-nodes-base.function",
+        "typeVersion": 1,
+        "position": [400, 300],
+        "parameters": {
+          "functionCode": "const hl7 = $json.message.text || \"\";\n\nconst lines = hl7.split(/\\r?\\n/);\nconst pid = lines.find(line => line.startsWith(\"PID\"));\n\nif (!pid) {\n  throw new Error(\"No PID segment found in HL7 message\");\n}\n\nconst parts = pid.split(\"|\");\n\nconst nameField = parts[5] || \"\";\nconst [lastName, firstName] = nameField.split(\"^\");\n\nconst patient = {\n  resourceType: \"Patient\",\n  identifier: [{\n    system: \"urn:oid:1.2.840.114350\",\n    value: parts[3] || \"unknown\"\n  }],\n  name: [{\n    family: lastName || \"\",\n    given: [firstName || \"\"]\n  }],\n  gender: parts[8] === \"M\" ? \"male\" : parts[8] === \"F\" ? \"female\" : \"unknown\",\n  birthDate: (parts[7] || \"\").slice(0, 8).replace(/(\\d{4})(\\d{2})(\\d{2})/, \"$1-$2-$3\")\n};\n\nreturn [{ json: patient }];"
+        }
+      },
+      {
+        "id": "sendToAidbox",
+        "name": "POST to Aidbox",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 1,
+        "position": [700, 300],
+        "parameters": {
+          "url": "https://your-aidbox-url.com/Patient",
+          "method": "POST",
+          "authentication": "basicAuth",
+          "responseFormat": "json",
+          "jsonParameters": true,
+          "options": {},
+          "bodyContentType": "json",
+          "bodyParametersJson": "={{ JSON.stringify($json) }}"
+        },
+        "credentials": {
+          "httpBasicAuth": {
+            "id": "your-aidbox-credentials-id",
+            "name": "Aidbox Credentials"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "telegramTrigger": {
+        "main": [
+          [
+            {
+              "node": "transformHL7",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "transformHL7": {
+        "main": [
+          [
+            {
+              "node": "sendToAidbox",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "name": "HL7 to FHIR Pipeline",
+    "settings": {},
+    "version": 1
+  }
+  

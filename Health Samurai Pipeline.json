@@ -1,0 +1,112 @@
+{
+  "name": "Health Samurai Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "id": "92a73240-9e5d-4ea8-aa50-cae4d0db3779",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "b9dad9bf-c41e-4be1-a95d-e1686d782ad2",
+      "credentials": {
+        "telegramApi": {
+          "id": "WjpHWg3Eo6T3a5nr",
+          "name": "HealthSamuraiBot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "330474279",
+        "text": "=You send - {{ $json.message.text }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        336,
+        0
+      ],
+      "id": "37ce24d7-defa-4da5-8705-df9418dab7b9",
+      "name": "Send a text message",
+      "webhookId": "7b285da5-a070-452d-a640-51987ddba1dd",
+      "credentials": {
+        "telegramApi": {
+          "id": "WjpHWg3Eo6T3a5nr",
+          "name": "HealthSamuraiBot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "basicAuth",
+        "requestMethod": "POST",
+        "url": "https://vibjkbgpri.aidbox.app/RawHL7Message",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={{ $('Telegram Trigger').item.json.message.text }}"
+      },
+      "id": "5e382212-51cf-40c8-8205-61de208e7453",
+      "name": "POST/RawHL7Message to Aidbox",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        816,
+        0
+      ],
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "AfEB774YRp4HoCr0",
+          "name": "aidbox cred"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        [
+          {
+            "node": "POST/RawHL7Message to Aidbox",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "6118c79d-1f96-4005-a214-ab703cec390e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "bce5733cacfc4e7aef9a0d02aa49a6d1d655c85ebd6e75229f475002be8f1796"
+  },
+  "id": "90nhNgH04ggbXXSW",
+  "tags": []
+}
