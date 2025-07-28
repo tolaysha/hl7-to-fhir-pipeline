@@ -16,6 +16,8 @@ It also integrates with n8n for orchestration and monitoring, and sends status u
 
 📦 Fully automated via n8n workflow engine
 
+
+
 🔧 Stack
 Aidbox — FHIR-compliant data store and rules engine
 
@@ -26,6 +28,8 @@ RabbitMQ / Kafka — HL7 transport (AMQP / stream)
 OpenRouter (optional) — HL7 → FHIR parsing via LLM
 
 Telegram Bot — Notifications and control
+
+
 
 📄 Example Flow
 HL7 message arrives in queue
